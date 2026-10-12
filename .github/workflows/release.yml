@@ -1,0 +1,28 @@
+name: Publish app release
+
+# Push a tag such as v1.7.5-beta to publish releases/<tag>/*.apk as a GitHub Release.
+# The in-app "Check for App Update" button reads these releases. If releases/<tag>/DRAFT
+# exists the release is created as a draft, to be published by hand later.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          dir="releases/$TAG"
+          ls "$dir"/*.apk
+          flags="--title $TAG --notes-file $dir/NOTES.md"
+          case "$TAG" in *beta*) flags="$flags --prerelease" ;; esac
+          [ -f "$dir/DRAFT" ] && flags="$flags --draft"
+          gh release create "$TAG" "$dir"/*.apk $flags

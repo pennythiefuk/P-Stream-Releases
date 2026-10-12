@@ -1,0 +1,3 @@
+# The plugin is signed byte-for-byte: never let git rewrite its line endings.
+plugin-release.js -text
+*.apk binary
