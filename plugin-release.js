@@ -132,6 +132,30 @@ function queryParam(url, name) {
     return null;
 }
 
+// Standard or URL-safe base64 (padding optional) to a UTF-8 string, or null if it isn't valid.
+function base64Decode(text) {
+    var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    var s = String(text).replace(/-/g, "+").replace(/_/g, "/").replace(/=+$/, "");
+    var bytes = [], bits = 0, value = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = alphabet.indexOf(s.charAt(i));
+        if (c < 0) return null;
+        value = (value << 6) | c;
+        bits += 6;
+        if (bits >= 8) {
+            bits -= 8;
+            bytes.push((value >> bits) & 0xFF);
+        }
+    }
+    try {
+        return decodeURIComponent(bytes.map(function (b) {
+            return "%" + (b < 16 ? "0" : "") + b.toString(16);
+        }).join(""));
+    } catch (e) {
+        return null;
+    }
+}
+
 // Form-style encoding (spaces as "+"), matching java.net.URLEncoder.
 function formEncode(s) {
     return encodeURIComponent(s).replace(/%20/g, "+");
@@ -285,7 +309,9 @@ var Rhea = (function () {
 
 // ---- src/sources/zeta.js ----
 // Zeta — movies & shows. Three endpoints asked at once; each returns an AES-GCM-encrypted
-// stream URL.
+// stream URL. The first endpoint's URL is a relay whose "q" parameter carries the real per-quality
+// playlists and the headers they need; the relay is often very slow (up to a minute to start), so
+// those playlists are played directly and the relay links are kept as fallbacks.
 var Zeta = (function () {
     var S = SECRETS.zeta;
 
@@ -295,7 +321,31 @@ var Zeta = (function () {
 
     function stream(id, url) {
         if (!url || url.indexOf("http") !== 0) return null;
-        return { id: id, name: "Zeta " + capitalize(id) + " (Auto)", url: url, isDash: url.indexOf(".mpd") >= 0 };
+        return {
+            id: id, name: "Zeta " + capitalize(id) + " (Auto)", quality: "auto",
+            url: url, isDash: url.indexOf(".mpd") >= 0, headers: headers(),
+        };
+    }
+
+    // The relay's per-quality playlists, best first, each with the headers its host requires.
+    function direct(relay) {
+        var q = queryParam(relay.url, "q");
+        var payload = q ? parseJson(base64Decode(q)) : null;
+        if (!payload || !payload.v || !payload.v.length) return [];
+        var h = { "User-Agent": SECRETS.rhea.ua };
+        var extra = payload.h || {};
+        if (typeof extra.origin === "string") h["Origin"] = extra.origin;
+        if (typeof extra.referer === "string") h["Referer"] = extra.referer;
+        var out = payload.v.filter(function (v) {
+            return v && typeof v.u === "string" && v.u.indexOf("https://") === 0;
+        }).map(function (v) {
+            var quality = String(v.q || "auto");
+            return {
+                id: relay.id + "-" + quality, name: "Zeta " + capitalize(relay.id) + " " + quality,
+                quality: quality, url: v.u, isDash: false, headers: h,
+            };
+        });
+        return stableSort(out, function (a, b) { return (parseInt(b.quality, 10) || 0) - (parseInt(a.quality, 10) || 0); });
     }
 
     // Endpoints 1 and 2 answer { sources: { <name>: { url } } }; prefer the configured name.
@@ -333,6 +383,10 @@ var Zeta = (function () {
             third && third.dash ? stream(S.e3, decrypt.aesGcmHex(String(third.dash), S.e3key)) : null,
         ].filter(function (s) { return s; });
         if (!streams.length) return NOT_FOUND;
+        if (streams[0].id === S.e1) {
+            // Direct playlists first, the remaining endpoints next, the slow relay last.
+            streams = direct(streams[0]).concat(streams.slice(1), [streams[0]]);
+        }
 
         var primary = streams[0];
         return {
@@ -341,18 +395,18 @@ var Zeta = (function () {
             streamType: primary.isDash ? "dash" : "hls",
             codec: "h264",
             skipProbe: false,
-            headers: headers(),
+            headers: primary.headers,
             captions: [],
             variants: streams.map(function (s) {
                 return {
                     id: "zeta-" + s.id,
                     name: s.name,
-                    quality: "auto",
+                    quality: s.quality,
                     codec: "h264",
                     tag: "remux",
                     streamUrl: s.url,
                     streamType: s.isDash ? "dash" : "hls",
-                    headers: headers(),
+                    headers: s.headers,
                     requiresRefreshOnSwitch: false,
                 };
             }),
