@@ -25,40 +25,48 @@ var SECRETS = (function () {
     }
     return {
     rhea: {
-        base: d([106,242,62,225,229,32,241,210,89,141,0,8,206,50,99,167,124,164,243,55,131,217,90,223,31,95,175,55,111,226,38,170,195,22,131], 1425039448),
-        origin: d([103,7,25,234,232,213,214,217,85,114,35,7,192,195,83,187,62,78,147,43,155,47], 1607963989),
-        referer: d([110,11,230,0,225,217,41,51,92,126,220,237,201,207,172,81,55,66,108,193,146,35,217], 3039336796),
-        ua: d([239,126,96,169,90,225,239,131,191,87,18,24,54,130,63,234,150,46,189,99,102,115,42,220,235,153,188,120,149,37,81,189,108,199,142,155,182,21,24,56,67,249,3,232,142,217,147,51,55,67,33,153,82,178,171,111,141,39,1,30,46,205,237,252,182,28,150,44,86,161,39,135,175,153,165,29,61,126,121,237,18,194,226,34,233,16,91,19,43,218,101,166,222,107,246,58,114,17,41,129,176,204,156,37,133,44,49,239,16,198,128], 94435320),
-        subs: d([127,82,47,34,239,219,168,72,70,47,0,193,193,143,120,96,42,23,252,233,138,123,72,10,3,230,184,191,123,91,57,39,215,166,147,89,92,63,26,238,163,139,106,121], 2163917892),
+        base: d([40,58,104,102,167,232,167,85,27,69,86,143,140,250,53,32,62,108,165,176,193,17,12,88,93,151,249,176,45,42,112,45,129,222,213], 3550914586),
+        origin: d([64,145,61,20,207,67,242,39,114,228,7,249,231,85,119,69,25,216,183,213,188,185], 2717057906),
+        referer: d([41,137,182,203,166,91,121,248,27,252,140,38,142,77,252,154,112,192,60,10,213,161,137], 2121800475),
+        ua: d([19,199,133,224,166,88,10,202,67,238,247,81,202,59,218,163,106,151,88,42,154,202,207,149,23,32,89,49,105,156,180,244,144,126,107,210,74,172,253,113,191,64,230,161,114,96,118,122,203,250,196,208,174,11,78,38,113,158,228,87,210,116,8,181,74,165,115,101,170,24,194,206,83,32,64,84,193,199,156,164,238,123,7,107,21,169,190,90,215,99,128,239,34,210,19,115,142,168,204,200,76,117,121,108,121,149,212,166,236,127,101], 1279610372),
+        subs: d([97,57,223,159,241,176,88,245,88,68,240,124,223,228,136,221,52,124,12,84,148,16,184,183,29,141,72,2,101,48,201,154,201,205,99,228,66,84,234,83,189,224,154,196], 1024110426),
     },
     zeta: {
-        base: d([26,245,19,222,149,39,220,237,41,157,45,51,175,40,5,130,78,162,153,18,249,193], 1809671976),
-        origin: d([127,96,110,61,240,178,161,14,92,21,76,208,200,177,34,39,34,49], 2292249165),
-        referer: d([2,149,93,59,141,71,146,8,33,224,127,214,181,68,17,33,95,196,214], 2392000304),
-        e1: d([70,93,124,35,213,215], 2410339956),
-        e1key: d([123,13,213,111,237,149,78,2,1,50,185,149,144,192,200,45,40,15,84,191,207,37,177,83,11,224,88,182,117,16,159,43,218,236,39,93,29,116,178,165,176,145,220,54,46,171,111,157,138,61,160,94,175,136,82,244,106,69,249,213,128,249,58,28], 3378043408),
-        e2: d([182,208,73,230,32,84], 1082153345),
-        e2key: d([35,61,32,142,178,245,180,224,12,88,26,115,204,249,109,157,127,108,163,90,203,18,76,189,90,209,173,8,123,44,104,206,135,221,214,235,64,21,65,18,230,240,127,209,127,153,205,40,214,1,88,187,162,188,167,66,111,39,1,105,223,154,152,251], 2108354124),
-        e3: d([84,26,90,249,223,149,193], 1485741438),
-        e3key: d([116,252,129,80,228,49,18,105,94,149,232,170,197,63,200,70,115,174,2,132,146,220,224,104,10,67,7,136,117,236,155,20,131,26,37,50,22,133,178,154,186,48,139,93,125,93,104,247,213,156,245,97,240,119,3,203,61,178,170,232,141,10,107,47], 2785816090),
-        pick: d([191,2,98,89,9,134], 4289432488),
+        base: d([159,181,249,238,16,103,54,221,172,221,199,3,42,104,239,178,203,226,115,34,124,129], 1530341293),
+        origin: d([244,237,73,195,123,63,134,240,215,152,107,46,67,60,5,217,169,188], 1988591558),
+        referer: d([69,48,40,155,202,226,231,168,102,69,10,118,242,225,100,129,24,97,163], 786866807),
+        e1: d([81,102,225,169,194,236], 87549283),
+        e1key: d([90,81,177,123,204,201,42,22,32,110,221,129,177,156,172,57,9,83,48,171,238,121,213,71,42,188,60,162,84,76,251,63,251,176,67,73,60,40,214,177,145,205,184,34,15,247,11,137,171,97,196,74,142,212,54,224,75,25,157,193,161,165,94,8], 3711731249),
+        e2: d([231,120,30,8,113,252], 2933387728),
+        e2key: d([111,168,173,218,254,96,57,180,64,205,151,39,128,108,224,201,51,249,46,14,135,135,193,233,22,68,32,92,55,185,229,154,203,72,91,191,12,128,204,70,170,101,242,133,51,12,64,124,154,148,213,239,238,41,42,22,35,178,140,61,147,15,21,175], 690453248),
+        e3: d([189,148,238,99,54,27,117], 3258586007),
+        e3key: d([3,36,150,37,147,233,5,28,41,77,255,223,178,231,223,51,4,118,21,241,229,4,247,29,125,155,16,253,2,52,140,97,244,194,50,71,97,93,165,239,205,232,156,40,10,133,127,130,162,68,226,20,135,175,20,190,74,106,189,157,250,210,124,90], 3541825133),
+        pick: d([28,165,27,194,170,33], 1691495435),
     },
     kylie: {
-        base: d([163,46,156,148,44,252,83,167,130,92,185,119,24,234,203,212,237,36,76,91], 559070353),
-        embedRef: d([243,204,48,49,124,30,255,2,219,185,29,215,78,17,109,118,229,154,241,190], 2231262913),
-        direct: d([15,109,39,177,128,191,232,130,34,20,12,88,171,177,126,252,25,43,246,107,249], 82444093),
-        srcKey: d([218,226,160,190,115,0,0,175,202,131,248,49,114,44,144,226], 911621097),
-        srcIv: d([22,208,201,36,226,40,9,27,60,248,166,177,173,1,153,49], 3544712731),
+        base: d([37,226,137,2,170,48,70,49,4,144,172,225,158,38,222,66,107,232,89,205], 3074912279),
+        embedRef: d([107,145,80,24,228,67,159,43,67,228,125,254,214,76,13,95,125,199,145,151], 2912813913),
+        direct: d([149,165,90,57,26,119,149,10,184,220,113,208,49,121,3,116,131,227,139,227,99], 2358523815),
+        srcKey: d([143,201,225,46,38,43,65,63,159,168,185,161,39,7,209,114], 2786529468),
+        srcIv: d([143,16,86,182,123,232,150,137,165,56,57,35,52,193,6,163], 1104660098),
     },
     sana: {
-        base: d([99,155,3,157,236,73,204,174,66,233,38,120,210,88,90,197,47,145,196,69], 684525905),
-        ua: d([251,214,89,216,78,73,214,242,171,255,43,105,34,42,6,155,130,134,132,18,114,219,19,173,255,49,133,9,129,141,104,204,120,111,183,234,162,189,33,73,87,81,58,153,154,113,170,66,35,235,24,232,70,26,146,30,153,143,56,111,58,101,212,141,162,180,175,93,66,9,30,246,187,49,156,108,41,214,64,156,6,106,219,83,253,184,98,98,63,115,91,215,202,195,207,75,102,185,16,240,164,100,165,84,145,132,8,158,4,110,185], 1956208620),
-        linkRe: d([64,51,236,254,129,255,53,156,116,93,193,19,174,170,234,189,22,120,52,45,191,12,129,208,12,215,90,113,9,47,200,167,167,137,90,157,110,84,216,39,156,228,190,182,29,128,22,21,247,89,162,246,131,239,80,47,25,118,158,89,166], 1563666290),
-        embedRe: d([120,224,131,59,189,38,28,30,87,138,171,196,152,121,132,125,97,163,67,251,140,218,234,102,23,1,52,160,115,233,140,110,217,19,54,9,84,178,250,168,182,32,194,119,120,64,101,198,158,205,191,30,212,127,73,252,35,167,241,179,140,79,117,80], 3277485137),
-        playerPath: d([46,183,211,223,236,62,89,253,64,193,227,35,197,45,131,146,33,168,11,15,145,138,230], 2063933787),
-        getVideo: d([91,236,162,134,142,113,45,129,60,132,144,44], 2121756199),
-        ajax: d([175,23,142,172,117,152,7,132,198,39,167,29,81,205,220,232,177,90,79,41,74,60,242,205], 1145341658),
-        ajaxSeason: d([204,223,217,113,86,78,102,7,224,184,240,131,101,39,146,57,156,159,18,166], 3709295351),
+        base: d([52,122,64,249,187,168,143,202,21,8,101,28,133,185,25,161,120,112,135,33], 1284433926),
+        ua: d([3,176,167,178,182,47,40,152,83,153,213,3,218,76,248,241,122,224,122,120,138,189,237,199,7,87,123,99,121,235,150,166,128,9,73,128,90,219,223,35,175,55,196,243,98,23,84,40,219,141,230,130,190,124,108,116,97,233,198,5,194,3,42,231,90,210,81,55,186,111,224,156,67,87,98,6,209,176,190,246,254,12,37,57,5,222,156,8,199,21,165,189,50,165,49,33,158,223,238,154,92,2,91,62,105,226,246,244,252,8,71], 510081300),
+        linkRe: d([232,84,90,18,41,152,131,112,220,58,119,255,6,205,92,81,190,31,130,193,23,107,55,60,164,176,236,157,161,72,126,75,15,238,236,113,198,51,110,203,52,131,8,90,181,231,160,249,95,62,20,26,43,136,230,195,177,17,40,181,14], 2978332890),
+        embedRe: d([254,90,247,16,59,156,104,53,209,48,223,239,30,195,240,86,231,25,55,208,10,96,158,77,145,187,64,139,245,83,248,69,95,169,66,34,210,8,142,131,48,154,182,92,254,250,17,237,24,119,203,53,82,197,61,215,165,29,133,152,10,245,1,123], 3895381719),
+        playerPath: d([224,66,219,242,34,203,81,208,142,52,235,14,11,216,139,191,239,93,3,34,95,127,238], 1443746965),
+        getVideo: d([179,226,198,35,102,127,73,36,212,138,244,137], 3675480271),
+        ajax: d([170,226,158,140,112,109,23,164,195,210,183,61,84,56,204,200,180,175,95,9,79,201,226,237], 1683256287),
+        ajaxSeason: d([191,144,219,152,37,1,100,238,147,247,242,106,22,104,144,208,239,208,16,79], 873796996),
+    },
+    remi: {
+        base: d([240,209,94,95,127,3,145,108,194,168,115,185,77,12,3,69,188,154], 3935323074),
+        player: d([128,142,131,70,15,92,76,117,166,254,166,182,55,82,212,7,220,132,68,133], 4081917106),
+        ua: d([237,44,29,219,88,179,146,241,189,5,111,106,52,208,66,152,148,124,192,17,100,33,87,174,233,203,193,10,151,119,44,207,110,149,243,233,180,71,101,74,65,171,126,154,140,139,238,65,53,17,92,235,80,224,214,29,143,117,124,108,44,159,144,142,180,78,235,94,84,243,90,245,173,203,216,111,63,44,4,159,16,144,159,80,235,66,38,97,41,143,23,212,220,57,139,72,112,67,84,243,178,158,225,87,135,126,76,157,18,148,253], 2011014650),
+        searchPath: d([174,115,231,56,58,248,50,18,218,31,206,219,94,190,228,121,184,47,46,245,88,15,195,75,136,151], 2486039771),
+        serversPath: d([29,17,155,223,137,138,19,179,98,55], 1934726760),
+        tokenPath: d([83,193,7,88,199,81,208,40,108,231], 4107093542),
     },
     };
 })();
@@ -195,6 +203,523 @@ function captionType(url) {
 }
 
 var NOT_FOUND = { type: "notFound" };
+
+// ---- src/crypto.js ----
+// Byte-level crypto in plain JavaScript, for sources whose keys the app's host helpers can't take
+// (raw-byte AES keys, PBKDF2). Bytes are plain arrays of 0-255.
+var bytes = (function () {
+    var B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    function fromBase64(text) {
+        var s = String(text).replace(/-/g, "+").replace(/_/g, "/").replace(/[\s=]+/g, "");
+        var out = [], bits = 0, value = 0;
+        for (var i = 0; i < s.length; i++) {
+            var c = B64.indexOf(s.charAt(i));
+            if (c < 0) return null;
+            value = ((value << 6) | c) & 0xFFFFFF;
+            bits += 6;
+            if (bits >= 8) {
+                bits -= 8;
+                out.push((value >> bits) & 0xFF);
+            }
+        }
+        return out;
+    }
+
+    function toBase64(b) {
+        var out = [];
+        for (var i = 0; i < b.length; i += 3) {
+            var n = (b[i] << 16) | ((b[i + 1] || 0) << 8) | (b[i + 2] || 0);
+            out.push(B64.charAt(n >> 18), B64.charAt((n >> 12) & 63),
+                i + 1 < b.length ? B64.charAt((n >> 6) & 63) : "=",
+                i + 2 < b.length ? B64.charAt(n & 63) : "=");
+        }
+        return out.join("");
+    }
+
+    function fromUtf8(s) {
+        var out = [];
+        s = unescape(encodeURIComponent(String(s)));
+        for (var i = 0; i < s.length; i++) out.push(s.charCodeAt(i));
+        return out;
+    }
+
+    function toUtf8(b) {
+        var chunks = [];
+        for (var i = 0; i < b.length; i += 4096) {
+            chunks.push(String.fromCharCode.apply(null, b.slice(i, i + 4096)));
+        }
+        try {
+            return decodeURIComponent(escape(chunks.join("")));
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function toHex(b) {
+        return b.map(function (x) { return (x < 16 ? "0" : "") + x.toString(16); }).join("");
+    }
+
+    return { fromBase64: fromBase64, toBase64: toBase64, fromUtf8: fromUtf8, toUtf8: toUtf8, toHex: toHex };
+})();
+
+var crypto = (function () {
+    var K = [
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+    ];
+    var W = new Array(64);
+
+    function compress(h, m, off) {
+        var i, a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];
+        for (i = 0; i < 16; i++) {
+            var j = off + i * 4;
+            W[i] = (m[j] << 24) | (m[j + 1] << 16) | (m[j + 2] << 8) | m[j + 3];
+        }
+        for (i = 16; i < 64; i++) {
+            var x = W[i - 15], y = W[i - 2];
+            var s0 = ((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3);
+            var s1 = ((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10);
+            W[i] = (W[i - 16] + s0 + W[i - 7] + s1) | 0;
+        }
+        for (i = 0; i < 64; i++) {
+            var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+            var t1 = (k + S1 + ((e & f) ^ (~e & g)) + K[i] + W[i]) | 0;
+            var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+            var t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+            k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+        }
+        h[0] = (h[0] + a) | 0; h[1] = (h[1] + b) | 0; h[2] = (h[2] + c) | 0; h[3] = (h[3] + d) | 0;
+        h[4] = (h[4] + e) | 0; h[5] = (h[5] + f) | 0; h[6] = (h[6] + g) | 0; h[7] = (h[7] + k) | 0;
+    }
+
+    function sha256(data) {
+        var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+        var len = data.length;
+        var m = data.slice();
+        m.push(0x80);
+        while (m.length % 64 !== 56) m.push(0);
+        var bitsHi = Math.floor(len / 0x20000000), bitsLo = (len * 8) >>> 0;
+        m.push((bitsHi >>> 24) & 255, (bitsHi >>> 16) & 255, (bitsHi >>> 8) & 255, bitsHi & 255,
+            (bitsLo >>> 24) & 255, (bitsLo >>> 16) & 255, (bitsLo >>> 8) & 255, bitsLo & 255);
+        for (var off = 0; off < m.length; off += 64) compress(h, m, off);
+        var out = [];
+        for (var i = 0; i < 8; i++) out.push((h[i] >>> 24) & 255, (h[i] >>> 16) & 255, (h[i] >>> 8) & 255, h[i] & 255);
+        return out;
+    }
+
+    function sha256Hex(text) {
+        return bytes.toHex(sha256(bytes.fromUtf8(text)));
+    }
+
+    function hmacSha256(key, data) {
+        if (key.length > 64) key = sha256(key);
+        var ipad = [], opad = [];
+        for (var i = 0; i < 64; i++) {
+            var kb = key[i] || 0;
+            ipad.push(kb ^ 0x36);
+            opad.push(kb ^ 0x5c);
+        }
+        return sha256(opad.concat(sha256(ipad.concat(data))));
+    }
+
+    function pbkdf2Sha256(password, salt, iterations, length) {
+        // The app's native helper is ~100x faster than this interpreted fallback.
+        if (typeof __host_pbkdf2Sha256 === "function") {
+            var fast = __host_pbkdf2Sha256(bytes.toBase64(password), bytes.toBase64(salt), iterations, length);
+            if (fast) return bytes.fromBase64(fast);
+        }
+        var out = [];
+        for (var block = 1; out.length < length; block++) {
+            var u = hmacSha256(password, salt.concat([(block >>> 24) & 255, (block >>> 16) & 255, (block >>> 8) & 255, block & 255]));
+            var t = u.slice();
+            for (var i = 1; i < iterations; i++) {
+                u = hmacSha256(password, u);
+                for (var j = 0; j < t.length; j++) t[j] ^= u[j];
+            }
+            out = out.concat(t);
+        }
+        return out.slice(0, length);
+    }
+
+    // AES (decryption only), FIPS-197.
+    var SBOX = [], INV = [];
+    (function () {
+        var p = 1, q = 1;
+        do {
+            p = p ^ ((p << 1) & 0xff) ^ (p & 0x80 ? 0x1b : 0);
+            q ^= q << 1; q ^= q << 2; q ^= q << 4; q &= 0xff;
+            if (q & 0x80) q ^= 0x09;
+            var x = q ^ ((q << 1) | (q >> 7)) ^ ((q << 2) | (q >> 6)) ^ ((q << 3) | (q >> 5)) ^ ((q << 4) | (q >> 4));
+            x = (x ^ 0x63) & 0xff;
+            SBOX[p] = x;
+            INV[x] = p;
+        } while (p !== 1);
+        SBOX[0] = 0x63;
+        INV[0x63] = 0;
+    })();
+
+    function xtime(a) { return ((a << 1) ^ (a & 0x80 ? 0x1b : 0)) & 0xff; }
+    function mul(a, b) {
+        var r = 0;
+        while (b) {
+            if (b & 1) r ^= a;
+            a = xtime(a);
+            b >>= 1;
+        }
+        return r;
+    }
+    var M9 = [], M11 = [], M13 = [], M14 = [];
+    for (var v = 0; v < 256; v++) {
+        M9[v] = mul(v, 9); M11[v] = mul(v, 11); M13[v] = mul(v, 13); M14[v] = mul(v, 14);
+    }
+
+    function expandKey(key) {
+        var nk = key.length / 4, rounds = nk + 6, w = [], rcon = 1, i;
+        for (i = 0; i < nk; i++) w.push(key.slice(i * 4, i * 4 + 4));
+        for (i = nk; i < 4 * (rounds + 1); i++) {
+            var t = w[i - 1].slice();
+            if (i % nk === 0) {
+                t = [SBOX[t[1]] ^ rcon, SBOX[t[2]], SBOX[t[3]], SBOX[t[0]]];
+                rcon = xtime(rcon);
+            } else if (nk > 6 && i % nk === 4) {
+                t = t.map(function (x) { return SBOX[x]; });
+            }
+            w.push(w[i - nk].map(function (x, j) { return x ^ t[j]; }));
+        }
+        return { w: w, rounds: rounds };
+    }
+
+    function decryptBlock(ks, input) {
+        var s = input.slice(), r, c, i;
+        function addRound(round) {
+            for (c = 0; c < 4; c++) for (r = 0; r < 4; r++) s[c * 4 + r] ^= ks.w[round * 4 + c][r];
+        }
+        addRound(ks.rounds);
+        for (var round = ks.rounds - 1; round >= 0; round--) {
+            var t = s.slice();
+            for (c = 0; c < 4; c++) for (r = 0; r < 4; r++) s[c * 4 + r] = INV[t[((c - r + 4) % 4) * 4 + r]];
+            addRound(round);
+            if (round > 0) {
+                for (c = 0; c < 4; c++) {
+                    var a0 = s[c * 4], a1 = s[c * 4 + 1], a2 = s[c * 4 + 2], a3 = s[c * 4 + 3];
+                    s[c * 4] = M14[a0] ^ M11[a1] ^ M13[a2] ^ M9[a3];
+                    s[c * 4 + 1] = M9[a0] ^ M14[a1] ^ M11[a2] ^ M13[a3];
+                    s[c * 4 + 2] = M13[a0] ^ M9[a1] ^ M14[a2] ^ M11[a3];
+                    s[c * 4 + 3] = M11[a0] ^ M13[a1] ^ M9[a2] ^ M14[a3];
+                }
+            }
+        }
+        return s;
+    }
+
+    // AES-CBC decrypt with PKCS#7 padding removed; null if the padding is wrong.
+    function aesCbcDecrypt(key, iv, data) {
+        if (data.length === 0 || data.length % 16 !== 0) return null;
+        var ks = expandKey(key), out = [], prev = iv;
+        for (var i = 0; i < data.length; i += 16) {
+            var block = data.slice(i, i + 16);
+            var plain = decryptBlock(ks, block);
+            for (var j = 0; j < 16; j++) out.push(plain[j] ^ prev[j]);
+            prev = block;
+        }
+        var pad = out[out.length - 1];
+        if (pad < 1 || pad > 16) return null;
+        return out.slice(0, out.length - pad);
+    }
+
+    return {
+        sha256: sha256, sha256Hex: sha256Hex, pbkdf2Sha256: pbkdf2Sha256, aesCbcDecrypt: aesCbcDecrypt,
+    };
+})();
+
+// ---- src/wasm.js ----
+// A small WebAssembly interpreter (the sandbox has no WebAssembly). Supports the i32 subset that
+// tiny key-mixing modules use: memory, globals, data segments, exported functions, structured
+// control flow and i32 arithmetic/comparison/load/store. Throws on anything else.
+var wasm = (function () {
+    function Reader(b, pos) {
+        this.b = b;
+        this.pos = pos || 0;
+    }
+    Reader.prototype.byte = function () { return this.b[this.pos++]; };
+    Reader.prototype.u32 = function () {
+        var result = 0, shift = 0, byte;
+        do {
+            byte = this.b[this.pos++];
+            result += (byte & 0x7f) * Math.pow(2, shift);
+            shift += 7;
+        } while (byte & 0x80);
+        return result;
+    };
+    Reader.prototype.s32 = function () {
+        var result = 0, shift = 0, byte;
+        do {
+            byte = this.b[this.pos++];
+            result |= (byte & 0x7f) << shift;
+            shift += 7;
+        } while (byte & 0x80);
+        if (shift < 32 && (byte & 0x40)) result |= -1 << shift;
+        return result | 0;
+    };
+    Reader.prototype.name = function () {
+        var n = this.u32(), s = "";
+        for (var i = 0; i < n; i++) s += String.fromCharCode(this.byte());
+        return s;
+    };
+
+    // Evaluates a constant init expression (i32.const N end).
+    function constExpr(r) {
+        var op = r.byte(), v = 0;
+        if (op === 0x41) v = r.s32();
+        else throw new Error("wasm: unsupported init expr 0x" + op.toString(16));
+        if (r.byte() !== 0x0b) throw new Error("wasm: bad init expr");
+        return v;
+    }
+
+    // Pre-computes block/loop/if targets so branches don't rescan the code.
+    function scanBlocks(code, start, end) {
+        var r = new Reader(code, start), stack = [], info = {};
+        while (r.pos < end) {
+            var at = r.pos, op = r.byte();
+            switch (op) {
+                case 0x02: case 0x03: case 0x04:
+                    r.byte();
+                    stack.push({ at: at, op: op, body: r.pos });
+                    break;
+                case 0x05:
+                    stack[stack.length - 1].elseAt = at;
+                    break;
+                case 0x0b:
+                    var blk = stack.pop();
+                    if (blk) info[blk.at] = { op: blk.op, body: blk.body, end: at, elseAt: blk.elseAt };
+                    break;
+                case 0x0c: case 0x0d: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24:
+                    r.u32();
+                    break;
+                case 0x41:
+                    r.s32();
+                    break;
+                case 0x3f: case 0x40:
+                    r.byte();
+                    break;
+                default:
+                    if (op >= 0x28 && op <= 0x3e) { r.u32(); r.u32(); }
+            }
+        }
+        return info;
+    }
+
+    function instantiate(binary) {
+        var b = binary, r = new Reader(b, 8);
+        if (b[0] !== 0 || b[1] !== 0x61 || b[2] !== 0x73 || b[3] !== 0x6d) throw new Error("wasm: bad magic");
+        var types = [], funcTypes = [], globals = [], exportsMap = {}, bodies = [], data = [], memPages = 0;
+        while (r.pos < b.length) {
+            var id = r.byte(), size = r.u32(), end = r.pos + size, n, i;
+            if (id === 1) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    r.byte();
+                    var params = r.u32();
+                    r.pos += params;
+                    var results = r.u32();
+                    r.pos += results;
+                    types.push({ params: params, results: results });
+                }
+            } else if (id === 2) {
+                if (r.u32() > 0) throw new Error("wasm: imports not supported");
+            } else if (id === 3) {
+                n = r.u32();
+                for (i = 0; i < n; i++) funcTypes.push(r.u32());
+            } else if (id === 5) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    var flags = r.byte();
+                    memPages = r.u32();
+                    if (flags & 1) r.u32();
+                }
+            } else if (id === 6) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    r.byte();
+                    r.byte();
+                    globals.push(constExpr(r));
+                }
+            } else if (id === 7) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    var name = r.name(), kind = r.byte(), index = r.u32();
+                    exportsMap[name] = { kind: kind, index: index };
+                }
+            } else if (id === 10) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    var fsize = r.u32(), fend = r.pos + fsize, locals = 0, groups = r.u32();
+                    for (var g = 0; g < groups; g++) {
+                        locals += r.u32();
+                        r.byte();
+                    }
+                    bodies.push({ start: r.pos, end: fend, locals: locals, blocks: scanBlocks(b, r.pos, fend) });
+                    r.pos = fend;
+                }
+            } else if (id === 11) {
+                n = r.u32();
+                for (i = 0; i < n; i++) {
+                    if (r.u32() !== 0) throw new Error("wasm: unsupported data segment");
+                    var offset = constExpr(r), len = r.u32();
+                    data.push({ offset: offset, bytes: b.slice(r.pos, r.pos + len) });
+                    r.pos += len;
+                }
+            }
+            r.pos = end;
+        }
+
+        // Sparse: bytes never written read as 0 (filling 64 KB per page up front is slow here).
+        var memory = [], memorySize = Math.max(memPages, 1) * 65536;
+        data.forEach(function (seg) {
+            for (var k = 0; k < seg.bytes.length; k++) memory[seg.offset + k] = seg.bytes[k];
+        });
+
+        function load32(addr) {
+            return (memory[addr] | 0) | ((memory[addr + 1] | 0) << 8) | ((memory[addr + 2] | 0) << 16) | ((memory[addr + 3] | 0) << 24);
+        }
+
+        function call(fi, args) {
+            var body = bodies[fi], type = types[funcTypes[fi]];
+            var locals = args.slice(0, type.params);
+            while (locals.length < type.params + body.locals) locals.push(0);
+            var stack = [], labels = [], rd = new Reader(b, body.start), steps = 0;
+            labels.push({ cont: body.end, height: 0, isLoop: false });
+
+            function branch(depth) {
+                var label = labels[labels.length - 1 - depth];
+                labels.length -= depth;
+                if (label.isLoop) {
+                    rd.pos = label.cont;
+                } else {
+                    labels.pop();
+                    rd.pos = label.cont + 1;
+                }
+                stack.length = label.height;
+            }
+
+            while (rd.pos < body.end) {
+                if (++steps > 5000000) throw new Error("wasm: step limit");
+                var at = rd.pos, op = rd.byte(), x, y, blk;
+                switch (op) {
+                    case 0x00: throw new Error("wasm: unreachable");
+                    case 0x01: break;
+                    case 0x02:
+                        rd.byte();
+                        labels.push({ cont: body.blocks[at].end, height: stack.length, isLoop: false });
+                        break;
+                    case 0x03:
+                        rd.byte();
+                        labels.push({ cont: body.blocks[at].body, height: stack.length, isLoop: true });
+                        break;
+                    case 0x04:
+                        rd.byte();
+                        blk = body.blocks[at];
+                        labels.push({ cont: blk.end, height: stack.length - 1, isLoop: false });
+                        if (!stack.pop()) {
+                            if (blk.elseAt !== undefined) rd.pos = blk.elseAt + 1;
+                            else { labels.pop(); rd.pos = blk.end + 1; }
+                        }
+                        break;
+                    case 0x05: branch(0); break;
+                    case 0x0b: labels.pop(); break;
+                    case 0x0c: branch(rd.u32()); break;
+                    case 0x0d: x = rd.u32(); if (stack.pop()) branch(x); break;
+                    case 0x0f: rd.pos = body.end; break;
+                    case 0x1a: stack.pop(); break;
+                    case 0x1b: x = stack.pop(); y = stack.pop(); if (!x) stack[stack.length - 1] = y; break;
+                    case 0x20: stack.push(locals[rd.u32()]); break;
+                    case 0x21: locals[rd.u32()] = stack.pop(); break;
+                    case 0x22: locals[rd.u32()] = stack[stack.length - 1]; break;
+                    case 0x23: stack.push(globals[rd.u32()]); break;
+                    case 0x24: globals[rd.u32()] = stack.pop(); break;
+                    case 0x28: rd.u32(); x = rd.u32(); stack.push(load32(stack.pop() + x)); break;
+                    case 0x2c: rd.u32(); x = rd.u32(); y = memory[stack.pop() + x] | 0; stack.push(y > 127 ? y - 256 : y); break;
+                    case 0x2d: rd.u32(); x = rd.u32(); stack.push(memory[stack.pop() + x] | 0); break;
+                    case 0x36:
+                        rd.u32(); x = rd.u32(); y = stack.pop(); x += stack.pop();
+                        memory[x] = y & 255; memory[x + 1] = (y >>> 8) & 255; memory[x + 2] = (y >>> 16) & 255; memory[x + 3] = (y >>> 24) & 255;
+                        break;
+                    case 0x3a: rd.u32(); x = rd.u32(); y = stack.pop(); memory[stack.pop() + x] = y & 255; break;
+                    case 0x3f: rd.byte(); stack.push(memorySize / 65536); break;
+                    case 0x41: stack.push(rd.s32()); break;
+                    case 0x45: stack.push(stack.pop() === 0 ? 1 : 0); break;
+                    default:
+                        if (op < 0x46 || op > 0x78) throw new Error("wasm: unsupported opcode 0x" + op.toString(16));
+                        y = stack.pop() | 0;
+                        x = stack.pop() | 0;
+                        stack.push(binary32(op, x, y));
+                }
+            }
+            return type.results ? stack.pop() : undefined;
+        }
+
+        function binary32(op, x, y) {
+            var ux = x >>> 0, uy = y >>> 0;
+            switch (op) {
+                case 0x46: return x === y ? 1 : 0;
+                case 0x47: return x !== y ? 1 : 0;
+                case 0x48: return x < y ? 1 : 0;
+                case 0x49: return ux < uy ? 1 : 0;
+                case 0x4a: return x > y ? 1 : 0;
+                case 0x4b: return ux > uy ? 1 : 0;
+                case 0x4c: return x <= y ? 1 : 0;
+                case 0x4d: return ux <= uy ? 1 : 0;
+                case 0x4e: return x >= y ? 1 : 0;
+                case 0x4f: return ux >= uy ? 1 : 0;
+                case 0x6a: return (x + y) | 0;
+                case 0x6b: return (x - y) | 0;
+                case 0x6c: return mul32(x, y);
+                case 0x6e: if (!uy) throw new Error("wasm: divide by zero"); return (ux / uy) | 0;
+                case 0x70: if (!uy) throw new Error("wasm: divide by zero"); return (ux % uy) | 0;
+                case 0x71: return x & y;
+                case 0x72: return x | y;
+                case 0x73: return x ^ y;
+                case 0x74: return x << (y & 31);
+                case 0x75: return x >> (y & 31);
+                case 0x76: return (x >>> (y & 31)) | 0;
+                case 0x77: y &= 31; return (x << y) | (x >>> ((32 - y) & 31));
+                case 0x78: y &= 31; return (x >>> y) | (x << ((32 - y) & 31));
+            }
+            throw new Error("wasm: unsupported opcode 0x" + op.toString(16));
+        }
+
+        function mul32(x, y) {
+            var lo = (x & 0xffff) * y;
+            var hi = ((x >>> 16) * y) & 0xffff;
+            return (lo + (hi << 16)) | 0;
+        }
+
+        var api = {
+            write: function (addr, data) {
+                for (var k = 0; k < data.length; k++) memory[addr + k] = data[k] & 255;
+            },
+            read: function (addr, length) {
+                var out = [];
+                for (var k = 0; k < length; k++) out.push(memory[addr + k] | 0);
+                return out;
+            },
+        };
+        Object.keys(exportsMap).forEach(function (name) {
+            var e = exportsMap[name];
+            if (e.kind === 0) api[name] = function () { return call(e.index, Array.prototype.slice.call(arguments)); };
+        });
+        return api;
+    }
+
+    return { instantiate: instantiate };
+})();
 
 // ---- src/sources/rhea.js ----
 // Rhea — movies & shows. Asks every sub-provider at once and offers each working stream as a
@@ -744,6 +1269,210 @@ var Sana = (function () {
     return { resolve: resolve };
 })();
 
+// ---- src/sources/remi.js ----
+// Remi — anime, Japanese and English audio in one stream. The episode's player page hides the stream
+// address behind several layers: field names derived from a seed, a token round-trip, a tiny
+// per-page WebAssembly key mixer, PBKDF2 + AES-CBC, and playlists that are base64 + XOR scrambled.
+// The plugin unscrambles the playlists itself and hands the player `data:` playlists.
+var Remi = (function () {
+    var S = SECRETS.remi;
+
+    function siteHeaders() {
+        return { "User-Agent": S.ua, "Referer": S.base + "/", "Origin": S.base };
+    }
+
+    function playerHeaders() {
+        return { "User-Agent": S.ua, "Referer": S.player + "/" };
+    }
+
+    function findAnilistId(media) {
+        if (media.anilistId && /^\d+$/.test(String(media.anilistId))) return String(media.anilistId);
+        if (!media.title) return null;
+        var json = parseJson(http.get(S.base + S.searchPath + encodeURIComponent(media.title), siteHeaders()));
+        var hit = json && json.results && json.results[0];
+        return hit && hit.anilist_id ? String(hit.anilist_id) : null;
+    }
+
+    // Value of `name` in the page's data object, quoted or bare key.
+    function field(html, name) {
+        var m = new RegExp('"?' + escapeRegex(name) + '"?\\s*:\\s*"([^"]*)"').exec(html);
+        return m ? m[1] : null;
+    }
+
+    function chainedHash(start) {
+        var h = start;
+        for (var i = 0; i < 3; i++) h = crypto.sha256Hex(h + i);
+        return h;
+    }
+
+    // The stream address and the playlist key for one player page, or null.
+    function unlock(pageUrl) {
+        var html = http.get(pageUrl, { "User-Agent": S.ua, "Referer": S.base + "/" });
+        if (!html) return null;
+        var seed = (/obfuscation_seed:"([0-9a-f]+)"/.exec(html) || [])[1];
+        var program = (/w_payload:"([A-Za-z0-9+\/=]+)"/.exec(html) || [])[1];
+        if (!seed || !program) return null;
+
+        var e = chainedHash(seed), l = chainedHash(e);
+        var frag1 = bytes.fromBase64(field(html, "kf_" + e.substring(8, 16)) || "");
+        var iv = bytes.fromBase64(field(html, "ivf_" + e.substring(16, 24)) || "");
+        var frag2 = bytes.fromBase64(field(html, l.substring(0, 16) + "_" + l.substring(16, 24)) || "");
+        var token = field(html, e.substring(48, 64) + "_" + e.substring(56, 64));
+        if (!frag1 || !frag1.length || !iv || iv.length !== 16 || !frag2 || !token) return null;
+
+        var tokenData = parseJson(http.get(S.player + S.tokenPath + token, playerHeaders()));
+        if (!tokenData) return null;
+        var cipher = bytes.fromBase64(tokenData[crypto.sha256Hex(token + "vid").substring(0, 10)] || "");
+        var frag3 = bytes.fromBase64(tokenData[crypto.sha256Hex(token + "key").substring(0, 10)] || "");
+        if (!cipher || !cipher.length || !frag3 || frag3.length !== frag1.length) return null;
+
+        var mod = wasm.instantiate(bytes.fromBase64(program));
+        var n = frag1.length, p = 1000, i;
+        mod.write(p, frag1);
+        mod.write(p + n, frag2);
+        mod.write(p + 2 * n, frag3);
+        mod._s(parseInt(seed.substring(0, 8), 16) | 0);
+        mod._r(p, p + n, p + 2 * n, p + 3 * n, n);
+        var mixed = mod.read(p + 3 * n, n);
+        var playlistKey = mod.read(mod._c(), 32);
+
+        var derived = crypto.pbkdf2Sha256(mixed, bytes.fromUtf8(seed), 1000, 32);
+        for (i = 0; i < 32; i++) derived[i] ^= seed.charCodeAt(i % seed.length);
+        var plain = crypto.aesCbcDecrypt(crypto.sha256(derived), iv, cipher);
+        var url = plain ? (bytes.toUtf8(plain) || "").trim() : "";
+        if (url.indexOf("https://") !== 0) return null;
+
+        var subtitles = matchAll(/\{url:"([^"]+\.(?:vtt|srt|ass))",language:"([^"]*)"/g, html).map(function (m) {
+            return { url: m[1], language: m[2] };
+        });
+        return { url: url, key: playlistKey, subtitles: subtitles };
+    }
+
+    // Playlists arrive base64-encoded and XORed with the page's 32-byte key.
+    function unscramble(body, key) {
+        var text = String(body || "").trim();
+        if (text.indexOf("#EXTM3U") === 0) return text;
+        if (typeof __host_xorBase64 === "function") {
+            var fast = __host_xorBase64(text, bytes.toBase64(key));
+            return fast && fast.indexOf("#EXTM3U") === 0 ? fast : null;
+        }
+        var raw = bytes.fromBase64(text);
+        if (!raw || !raw.length) return null;
+        for (var i = 0; i < raw.length; i++) raw[i] ^= key[i % key.length];
+        var plain = bytes.toUtf8(raw);
+        return plain && plain.indexOf("#EXTM3U") === 0 ? plain : null;
+    }
+
+    function resolveUrl(base, ref) {
+        if (/^[a-z][a-z0-9+.-]*:/i.test(ref)) return ref;
+        if (ref.indexOf("//") === 0) return base.split(":")[0] + ":" + ref;
+        var origin = originOf(base);
+        if (ref.charAt(0) === "/") return origin + ref;
+        var path = base.substring(origin.length).split(/[?#]/)[0];
+        var parts = path.substring(0, path.lastIndexOf("/") + 1).split("/").concat(ref.split(/(?=[?#])/)[0].split("/"));
+        var out = [];
+        parts.forEach(function (seg, idx) {
+            if (seg === "..") { if (out.length > 1) out.pop(); }
+            else if (seg !== "." && (seg !== "" || idx === 0)) out.push(seg);
+        });
+        var suffix = ref.indexOf("?") >= 0 ? ref.substring(ref.indexOf("?")) : "";
+        return origin + out.join("/").replace(/^\/?/, "/") + suffix;
+    }
+
+    // Rewrites every URI in a playlist (lines and URI="...") to absolute form via `map`.
+    function rewrite(playlist, base, map) {
+        return playlist.split(/\r?\n/).map(function (line) {
+            var t = line.trim();
+            if (!t) return t;
+            if (t.charAt(0) !== "#") return map(resolveUrl(base, t));
+            return t.replace(/URI="([^"]+)"/g, function (all, uri) { return 'URI="' + map(resolveUrl(base, uri)) + '"'; });
+        }).join("\n");
+    }
+
+    function dataUrl(playlist) {
+        var encoded = typeof __host_base64Utf8 === "function" ? __host_base64Utf8(playlist) : null;
+        return "data:application/vnd.apple.mpegurl;base64," + (encoded || bytes.toBase64(bytes.fromUtf8(playlist)));
+    }
+
+    function isPlaylistUri(line) {
+        return /\.m3u8(\?|$)/i.test(line);
+    }
+
+    // Master playlist with every child playlist unscrambled and inlined.
+    function buildStream(unlocked) {
+        var master = unscramble(http.get(unlocked.url, playerHeaders()), unlocked.key);
+        if (!master) return null;
+        if (master.indexOf("#EXT-X-STREAM-INF") < 0) {
+            return dataUrl(rewrite(master, unlocked.url, function (u) { return u; }));
+        }
+        var children = [];
+        rewrite(master, unlocked.url, function (u) {
+            if (isPlaylistUri(u) && children.indexOf(u) < 0) children.push(u);
+            return u;
+        });
+        var bodies = http.all(children.map(function (u) { return { url: u, headers: playerHeaders() }; }));
+        var inlined = {};
+        for (var i = 0; i < children.length; i++) {
+            var plain = unscramble(okBody(bodies[i]), unlocked.key);
+            if (!plain) return null;
+            inlined[children[i]] = dataUrl(rewrite(plain, children[i], function (u) { return u; }));
+        }
+        return dataUrl(rewrite(master, unlocked.url, function (u) { return inlined[u] || u; }));
+    }
+
+    function resolve(media) {
+        if (!media.isAnime) return NOT_FOUND;
+        var anilistId = findAnilistId(media);
+        if (!anilistId) return NOT_FOUND;
+        var episode = media.type === "MOVIE" ? 1 : (media.episode || 1);
+        var json = parseJson(http.get(S.base + S.serversPath + anilistId + "/" + episode, siteHeaders()));
+        var servers = (json && json.servers) || [];
+
+        // Sub and dub entries share a player page (both audio tracks are in one stream).
+        var pages = [];
+        servers.forEach(function (s) {
+            if (s && typeof s.dataLink === "string" && s.dataLink.indexOf(S.player + "/") === 0 && pages.indexOf(s.dataLink) < 0) {
+                pages.push(s.dataLink);
+            }
+        });
+
+        for (var i = 0; i < pages.length && i < 2; i++) {
+            var unlocked = unlock(pages[i]);
+            var stream = unlocked ? buildStream(unlocked) : null;
+            if (!stream) continue;
+            var headers = playerHeaders();
+            return {
+                type: "success",
+                streamUrl: stream,
+                streamType: "hls",
+                codec: "h264",
+                skipProbe: false,
+                headers: headers,
+                // The app can't render .ass; its own subtitle search fills the gap.
+                captions: unlocked.subtitles.filter(function (s) {
+                    return !/\.ass$/i.test(s.url);
+                }).map(function (s) {
+                    return { url: s.url, language: s.language, langIso: "en", type: captionType(s.url) };
+                }),
+                variants: [{
+                    id: "remi-" + (i + 1),
+                    name: "Remi HD-" + (i + 1) + " (Sub & Dub)",
+                    quality: "auto",
+                    codec: "h264",
+                    tag: "multi-audio",
+                    streamUrl: stream,
+                    streamType: "hls",
+                    headers: headers,
+                    requiresRefreshOnSwitch: false,
+                }],
+            };
+        }
+        return NOT_FOUND;
+    }
+
+    return { resolve: resolve };
+})();
+
 // ---- src/plugin.js ----
 // Entry point the app calls. Same contract as the old APK plugin's Entry class: every method takes
 // and returns strings (JSON where structured).
@@ -752,6 +1481,7 @@ var SOURCES = [
     { id: "zeta", name: "Zeta", anime: false, impl: Zeta },
     { id: "kylie", name: "Kylie", anime: true, impl: Kylie },
     { id: "sana", name: "Sana", anime: true, impl: Sana },
+    { id: "remi", name: "Remi", anime: true, impl: Remi },
 ];
 
 function sourcesJson(ids) {
@@ -798,7 +1528,7 @@ var plugin = {
                 result = source.impl.resolve(media);
             } else {
                 // No source given: try this media type's sources in priority order.
-                var order = media.isAnime ? [Sana, Kylie] : [Rhea, Zeta];
+                var order = media.isAnime ? [Sana, Kylie, Remi] : [Rhea, Zeta];
                 for (var i = 0; i < order.length && result.type !== "success"; i++) {
                     result = order[i].resolve(media);
                 }
