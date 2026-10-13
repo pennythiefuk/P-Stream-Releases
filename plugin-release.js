@@ -721,226 +721,6 @@ var wasm = (function () {
     return { instantiate: instantiate };
 })();
 
-// ---- src/sources/rhea.js ----
-// Rhea — movies & shows. Asks every sub-provider at once and offers each working stream as a
-// variant, best first.
-var Rhea = (function () {
-    var S = SECRETS.rhea;
-
-    function headers() {
-        return { "User-Agent": S.ua, "Origin": S.origin, "Referer": S.referer };
-    }
-
-    // Streams arrive wrapped in a relay (".../m3u8?url=<inner>&headers=<json>"); play the inner
-    // URL directly with the relay's Origin/Referer/User-Agent.
-    function unwrap(url) {
-        var inner = queryParam(url, "url");
-        if (inner && inner.indexOf("http") === 0) {
-            var out = {};
-            var raw = parseJson(queryParam(url, "headers") || "") || {};
-            Object.keys(raw).forEach(function (k) {
-                var lower = k.toLowerCase();
-                if (lower === "origin" || lower === "referer" || lower === "user-agent") out[k] = String(raw[k]);
-            });
-            if (!out["User-Agent"]) out["User-Agent"] = S.ua;
-            return { url: inner, headers: out };
-        }
-        return { url: url, headers: { "User-Agent": S.ua } };
-    }
-
-    function captionsOf(data) {
-        var list = (data && data.captions) || [];
-        var out = [];
-        list.forEach(function (c) {
-            if (!c) return;
-            var url = c.url || c.file || "";
-            if (url.indexOf("http") !== 0) return;
-            var rawLang = c.lang || String(c.label || "").split(" - ")[0];
-            out.push({
-                url: url,
-                language: rawLang || "English",
-                langIso: rawLang.toLowerCase().trim() || "en",
-                type: captionType(url),
-            });
-        });
-        return out;
-    }
-
-    function resolve(media) {
-        var query = media.type === "SHOW"
-            ? "id=" + media.tmdbId + "&season=" + (media.season || 1) + "&episode=" + (media.episode || 1)
-            : "id=" + media.tmdbId;
-        var subs = S.subs.split("|");
-        var responses = http.all(subs.map(function (p) {
-            return { url: S.base + "/provider?provider=" + p + "&" + query, headers: headers() };
-        }));
-
-        var results = [];
-        responses.forEach(function (response, i) {
-            var json = parseJson(okBody(response));
-            var data = json && json.data;
-            var sources = (data && data.sources) || [];
-            for (var j = 0; j < sources.length; j++) {
-                var s = sources[j];
-                if (s && typeof s.url === "string" && s.url.indexOf("http") === 0) {
-                    var unwrapped = unwrap(s.url);
-                    results.push({
-                        provider: subs[i],
-                        quality: String(s.quality || "") || "1080p",
-                        url: unwrapped.url,
-                        headers: unwrapped.headers,
-                        captions: captionsOf(data),
-                    });
-                    break;
-                }
-            }
-        });
-        if (!results.length) return NOT_FOUND;
-
-        var seen = {};
-        var captions = [];
-        results.forEach(function (r) {
-            r.captions.forEach(function (c) {
-                if (!seen[c.url]) { seen[c.url] = true; captions.push(c); }
-            });
-        });
-        var primary = results[0];
-        return {
-            type: "success",
-            streamUrl: primary.url,
-            streamType: "hls",
-            codec: "h264",
-            skipProbe: false,
-            headers: primary.headers,
-            captions: captions,
-            variants: results.map(function (r) {
-                return {
-                    id: "rhea-" + r.provider,
-                    name: capitalize(r.provider) + " (" + r.quality + ")",
-                    quality: r.quality,
-                    codec: "h264",
-                    tag: "remux",
-                    streamUrl: r.url,
-                    streamType: "hls",
-                    headers: r.headers,
-                    requiresRefreshOnSwitch: false,
-                };
-            }),
-        };
-    }
-
-    return { resolve: resolve };
-})();
-
-// ---- src/sources/zeta.js ----
-// Zeta — movies & shows. Three endpoints asked at once; each returns an AES-GCM-encrypted
-// stream URL. The first endpoint's URL is a relay whose "q" parameter carries the real per-quality
-// playlists and the headers they need; the relay is often very slow (up to a minute to start), so
-// those playlists are played directly and the relay links are kept as fallbacks.
-var Zeta = (function () {
-    var S = SECRETS.zeta;
-
-    function headers() {
-        return { "User-Agent": SECRETS.rhea.ua, "Origin": S.origin, "Referer": S.referer };
-    }
-
-    function stream(id, url) {
-        if (!url || url.indexOf("http") !== 0) return null;
-        return {
-            id: id, name: "Zeta " + capitalize(id) + " (Auto)", quality: "auto",
-            url: url, isDash: url.indexOf(".mpd") >= 0, headers: headers(),
-        };
-    }
-
-    // The relay's per-quality playlists, best first, each with the headers its host requires.
-    function direct(relay) {
-        var q = queryParam(relay.url, "q");
-        var payload = q ? parseJson(base64Decode(q)) : null;
-        if (!payload || !payload.v || !payload.v.length) return [];
-        var h = { "User-Agent": SECRETS.rhea.ua };
-        var extra = payload.h || {};
-        if (typeof extra.origin === "string") h["Origin"] = extra.origin;
-        if (typeof extra.referer === "string") h["Referer"] = extra.referer;
-        var out = payload.v.filter(function (v) {
-            return v && typeof v.u === "string" && v.u.indexOf("https://") === 0;
-        }).map(function (v) {
-            var quality = String(v.q || "auto");
-            return {
-                id: relay.id + "-" + quality, name: "Zeta " + capitalize(relay.id) + " " + quality,
-                quality: quality, url: v.u, isDash: false, headers: h,
-            };
-        });
-        return stableSort(out, function (a, b) { return (parseInt(b.quality, 10) || 0) - (parseInt(a.quality, 10) || 0); });
-    }
-
-    // Endpoints 1 and 2 answer { sources: { <name>: { url } } }; prefer the configured name.
-    function fromSources(id, keyHex, json) {
-        var sources = json && json.sources;
-        if (!sources || typeof sources !== "object") return null;
-        var target = sources[S.pick];
-        if (!target) {
-            var first = Object.keys(sources)[0];
-            target = first ? sources[first] : null;
-        }
-        if (!target || !target.url) return null;
-        return stream(id, decrypt.aesGcmHex(String(target.url), keyHex));
-    }
-
-    function resolve(media) {
-        if (!media.tmdbId) return NOT_FOUND;
-        var isShow = media.type === "SHOW";
-        var type = isShow ? "tv" : "movie";
-        var episodePart = isShow ? "&seasonId=" + (media.season || 1) + "&episodeId=" + (media.episode || 1) : "";
-        var query = "tmdbId=" + media.tmdbId + "&type=" + type + episodePart;
-        var titledQuery = "tmdbId=" + media.tmdbId + "&type=" + type +
-            (media.title ? "&t=" + formEncode(media.title) : "") +
-            (media.year && media.year > 0 ? "&ry=" + media.year : "") + episodePart;
-
-        var responses = http.all([
-            { url: S.base + "/" + S.e1 + "?" + query, headers: headers() },
-            { url: S.base + "/" + S.e2 + "?" + query, headers: headers() },
-            { url: S.base + "/" + S.e3 + "?" + titledQuery, headers: headers() },
-        ]);
-        var third = parseJson(okBody(responses[2]));
-        var streams = [
-            fromSources(S.e1, S.e1key, parseJson(okBody(responses[0]))),
-            fromSources(S.e2, S.e2key, parseJson(okBody(responses[1]))),
-            third && third.dash ? stream(S.e3, decrypt.aesGcmHex(String(third.dash), S.e3key)) : null,
-        ].filter(function (s) { return s; });
-        if (!streams.length) return NOT_FOUND;
-        if (streams[0].id === S.e1) {
-            // Direct playlists first, the remaining endpoints next, the slow relay last.
-            streams = direct(streams[0]).concat(streams.slice(1), [streams[0]]);
-        }
-
-        var primary = streams[0];
-        return {
-            type: "success",
-            streamUrl: primary.url,
-            streamType: primary.isDash ? "dash" : "hls",
-            codec: "h264",
-            skipProbe: false,
-            headers: primary.headers,
-            captions: [],
-            variants: streams.map(function (s) {
-                return {
-                    id: "zeta-" + s.id,
-                    name: s.name,
-                    quality: s.quality,
-                    codec: "h264",
-                    tag: "remux",
-                    streamUrl: s.url,
-                    streamType: s.isDash ? "dash" : "hls",
-                    headers: s.headers,
-                    requiresRefreshOnSwitch: false,
-                };
-            }),
-        };
-    }
-
-    return { resolve: resolve };
-})();
-
 // ---- src/sources/kylie.js ----
 // Kylie — anime. Fast path: the embed host's own AniList-id route. Fallback: search the site by
 // title, then walk episode → server list → embed.
@@ -1116,153 +896,6 @@ var Kylie = (function () {
             id: id, name: name, quality: "auto", codec: "h264", tag: tag, streamUrl: s.file,
             streamType: "hls", headers: { "User-Agent": SECRETS.rhea.ua, "Referer": s.referer },
             requiresRefreshOnSwitch: false,
-        };
-    }
-
-    return { resolve: resolve };
-})();
-
-// ---- src/sources/sana.js ----
-// Sana — anime with multi-audio. Search by title, find the episode page, then ask the embedded
-// player for its playlist.
-var Sana = (function () {
-    var S = SECRETS.sana;
-
-    function get(url, extraHeaders) {
-        var h = { "User-Agent": S.ua, "Referer": S.base + "/", "Connection": "close" };
-        Object.keys(extraHeaders || {}).forEach(function (k) { h[k] = extraHeaders[k]; });
-        return http.get(url, h);
-    }
-
-    function normTitle(s) {
-        return String(s).toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
-    }
-
-    function search(query, isMovie, year) {
-        var html = get(S.base + "/?s=" + formEncode(query));
-        if (!html) return [];
-        var linkRe = new RegExp(S.linkRe);
-        var results = [];
-        var seen = {};
-        matchAll(/<article[^>]*>([\s\S]*?)<\/article>/g, html).forEach(function (a) {
-            var link = linkRe.exec(a[1]);
-            if (!link) return;
-            var slug = link[3];
-            if (!slug || slug === "page" || seen[slug]) return;
-            seen[slug] = true;
-            var t = /class="entry-title"[^>]*>([^<]+)</.exec(a[1]);
-            var y = /class="year"[^>]*>(\d{4})</.exec(a[1]);
-            results.push({
-                url: link[1],
-                kind: link[2],
-                title: t ? t[1].trim() : slug.replace(/-/g, " "),
-                year: y ? parseInt(y[1], 10) : null,
-            });
-        });
-
-        var wantKind = isMovie ? "movies" : "series";
-        var pool = results.filter(function (r) { return r.kind === wantKind; });
-        if (!pool.length) pool = results;
-        if (year) {
-            var near = pool.filter(function (r) { return r.year !== null && Math.abs(r.year - year) <= 1; });
-            var undated = pool.filter(function (r) { return r.year === null; });
-            if (near.length) pool = near.concat(undated);
-        }
-        var target = normTitle(query);
-        pool = pool.filter(function (r) {
-            var n = normTitle(r.title);
-            return n === target || n.indexOf(target) >= 0 || target.indexOf(n) >= 0;
-        });
-        return stableSort(pool, function (a, b) {
-            var na = normTitle(a.title), nb = normTitle(b.title);
-            return ((na === target ? 0 : 1) - (nb === target ? 0 : 1)) ||
-                ((na.indexOf(target) === 0 ? 0 : 1) - (nb.indexOf(target) === 0 ? 0 : 1)) ||
-                (na.length - nb.length);
-        });
-    }
-
-    function findEpisode(seriesUrl, season, episode) {
-        var page = get(seriesUrl);
-        if (!page) return null;
-        var domainBase = S.base.substring(0, S.base.lastIndexOf("."));
-        var epRe = new RegExp('href="(' + escapeRegex(domainBase) + '\\.[a-z]+/episode/[^"]*' + season + "x" + episode + '[^"]*)"');
-        var seasons = matchAll(/data-post="(\d+)"\s+data-season="(\d+)"/g, page)
-            .map(function (m) { return { post: m[1], season: parseInt(m[2], 10) || 1 }; });
-        if (!seasons.length) {
-            var direct = epRe.exec(page);
-            return direct ? direct[1] : null;
-        }
-        var chosen = seasons.filter(function (s) { return s.season === season; })[0];
-        if (!chosen) return null;
-        var origin = originOf(seriesUrl) || S.base;
-        var seasonHtml = get(origin + S.ajax + "?action=" + S.ajaxSeason + "&season=" + season + "&post=" + chosen.post,
-            { "Referer": seriesUrl });
-        var m = seasonHtml ? epRe.exec(seasonHtml) : null;
-        return m ? m[1] : null;
-    }
-
-    function extract(pageUrl) {
-        var html = get(pageUrl);
-        var embed = html ? new RegExp(S.embedRe).exec(html) : null;
-        if (!embed) return null;
-        var embedUrl = embed[1], hash = embed[2];
-        var playerBase = embedUrl.split("/video/")[0];
-        var pageOrigin = (originOf(pageUrl) || S.base) + "/";
-        var playerHeaders = {
-            "User-Agent": S.ua,
-            "Referer": playerBase + "/",
-            "Origin": playerBase,
-            "X-Requested-With": "XMLHttpRequest",
-        };
-        // The player occasionally answers with an empty body; one retry clears it.
-        for (var attempt = 0; attempt < 2; attempt++) {
-            var json = parseJson(http.postForm(playerBase + S.playerPath + hash + S.getVideo, playerHeaders, { hash: hash, r: pageOrigin }));
-            var url = json ? (json.videoSource || json.securedLink || "") : "";
-            if (typeof url === "string" && url.indexOf("http") === 0) return url;
-        }
-        return null;
-    }
-
-    function resolve(media) {
-        if (!media.title) return NOT_FOUND;
-        var isMovie = media.type === "MOVIE";
-        var candidates = search(media.title, isMovie, media.year);
-        if (!candidates.length) return NOT_FOUND;
-        var season = isMovie ? 0 : (media.season || 1);
-        var episode = isMovie ? 0 : (media.episode || 1);
-
-        var playlist = null;
-        for (var i = 0; i < Math.min(3, candidates.length) && !playlist; i++) {
-            var pageUrl = isMovie ? candidates[i].url : findEpisode(candidates[i].url, season, episode);
-            if (pageUrl) playlist = extract(pageUrl);
-        }
-        if (!playlist) return NOT_FOUND;
-
-        var cdn = originOf(playlist);
-        var streamHeaders = { "User-Agent": S.ua };
-        if (cdn) {
-            streamHeaders["Referer"] = cdn + "/";
-            streamHeaders["Origin"] = cdn;
-        }
-        return {
-            type: "success",
-            streamUrl: playlist,
-            streamType: "hls",
-            codec: "h264",
-            skipProbe: false,
-            headers: streamHeaders,
-            captions: [],
-            variants: [{
-                id: "sana-master",
-                name: "Sana Master (Multi-Audio)",
-                quality: "auto",
-                codec: "h264",
-                tag: "multi-audio",
-                streamUrl: playlist,
-                streamType: "hls",
-                headers: streamHeaders,
-                requiresRefreshOnSwitch: false,
-            }],
         };
     }
 
@@ -1473,9 +1106,378 @@ var Remi = (function () {
     return { resolve: resolve };
 })();
 
+// ---- src/sources/rhea.js ----
+// Rhea — movies & shows. Asks every sub-provider at once and offers each working stream as a
+// variant, best first.
+var Rhea = (function () {
+    var S = SECRETS.rhea;
+
+    function headers() {
+        return { "User-Agent": S.ua, "Origin": S.origin, "Referer": S.referer };
+    }
+
+    // Streams arrive wrapped in a relay (".../m3u8?url=<inner>&headers=<json>"); play the inner
+    // URL directly with the relay's Origin/Referer/User-Agent.
+    function unwrap(url) {
+        var inner = queryParam(url, "url");
+        if (inner && inner.indexOf("http") === 0) {
+            var out = {};
+            var raw = parseJson(queryParam(url, "headers") || "") || {};
+            Object.keys(raw).forEach(function (k) {
+                var lower = k.toLowerCase();
+                if (lower === "origin" || lower === "referer" || lower === "user-agent") out[k] = String(raw[k]);
+            });
+            if (!out["User-Agent"]) out["User-Agent"] = S.ua;
+            return { url: inner, headers: out };
+        }
+        return { url: url, headers: { "User-Agent": S.ua } };
+    }
+
+    function captionsOf(data) {
+        var list = (data && data.captions) || [];
+        var out = [];
+        list.forEach(function (c) {
+            if (!c) return;
+            var url = c.url || c.file || "";
+            if (url.indexOf("http") !== 0) return;
+            var rawLang = c.lang || String(c.label || "").split(" - ")[0];
+            out.push({
+                url: url,
+                language: rawLang || "English",
+                langIso: rawLang.toLowerCase().trim() || "en",
+                type: captionType(url),
+            });
+        });
+        return out;
+    }
+
+    function resolve(media) {
+        var query = media.type === "SHOW"
+            ? "id=" + media.tmdbId + "&season=" + (media.season || 1) + "&episode=" + (media.episode || 1)
+            : "id=" + media.tmdbId;
+        var subs = S.subs.split("|");
+        var responses = http.all(subs.map(function (p) {
+            return { url: S.base + "/provider?provider=" + p + "&" + query, headers: headers() };
+        }));
+
+        var results = [];
+        responses.forEach(function (response, i) {
+            var json = parseJson(okBody(response));
+            var data = json && json.data;
+            var sources = (data && data.sources) || [];
+            for (var j = 0; j < sources.length; j++) {
+                var s = sources[j];
+                if (s && typeof s.url === "string" && s.url.indexOf("http") === 0) {
+                    var unwrapped = unwrap(s.url);
+                    results.push({
+                        provider: subs[i],
+                        quality: String(s.quality || "") || "1080p",
+                        url: unwrapped.url,
+                        headers: unwrapped.headers,
+                        captions: captionsOf(data),
+                    });
+                    break;
+                }
+            }
+        });
+        if (!results.length) return NOT_FOUND;
+
+        var seen = {};
+        var captions = [];
+        results.forEach(function (r) {
+            r.captions.forEach(function (c) {
+                if (!seen[c.url]) { seen[c.url] = true; captions.push(c); }
+            });
+        });
+        var primary = results[0];
+        return {
+            type: "success",
+            streamUrl: primary.url,
+            streamType: "hls",
+            codec: "h264",
+            skipProbe: false,
+            headers: primary.headers,
+            captions: captions,
+            variants: results.map(function (r) {
+                return {
+                    id: "rhea-" + r.provider,
+                    name: capitalize(r.provider) + " (" + r.quality + ")",
+                    quality: r.quality,
+                    codec: "h264",
+                    tag: "remux",
+                    streamUrl: r.url,
+                    streamType: "hls",
+                    headers: r.headers,
+                    requiresRefreshOnSwitch: false,
+                };
+            }),
+        };
+    }
+
+    return { resolve: resolve };
+})();
+
+// ---- src/sources/sana.js ----
+// Sana — anime with multi-audio. Search by title, find the episode page, then ask the embedded
+// player for its playlist.
+var Sana = (function () {
+    var S = SECRETS.sana;
+
+    function get(url, extraHeaders) {
+        var h = { "User-Agent": S.ua, "Referer": S.base + "/", "Connection": "close" };
+        Object.keys(extraHeaders || {}).forEach(function (k) { h[k] = extraHeaders[k]; });
+        return http.get(url, h);
+    }
+
+    function normTitle(s) {
+        return String(s).toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+    }
+
+    function search(query, isMovie, year) {
+        var html = get(S.base + "/?s=" + formEncode(query));
+        if (!html) return [];
+        var linkRe = new RegExp(S.linkRe);
+        var results = [];
+        var seen = {};
+        matchAll(/<article[^>]*>([\s\S]*?)<\/article>/g, html).forEach(function (a) {
+            var link = linkRe.exec(a[1]);
+            if (!link) return;
+            var slug = link[3];
+            if (!slug || slug === "page" || seen[slug]) return;
+            seen[slug] = true;
+            var t = /class="entry-title"[^>]*>([^<]+)</.exec(a[1]);
+            var y = /class="year"[^>]*>(\d{4})</.exec(a[1]);
+            results.push({
+                url: link[1],
+                kind: link[2],
+                title: t ? t[1].trim() : slug.replace(/-/g, " "),
+                year: y ? parseInt(y[1], 10) : null,
+            });
+        });
+
+        var wantKind = isMovie ? "movies" : "series";
+        var pool = results.filter(function (r) { return r.kind === wantKind; });
+        if (!pool.length) pool = results;
+        if (year) {
+            var near = pool.filter(function (r) { return r.year !== null && Math.abs(r.year - year) <= 1; });
+            var undated = pool.filter(function (r) { return r.year === null; });
+            if (near.length) pool = near.concat(undated);
+        }
+        var target = normTitle(query);
+        pool = pool.filter(function (r) {
+            var n = normTitle(r.title);
+            return n === target || n.indexOf(target) >= 0 || target.indexOf(n) >= 0;
+        });
+        return stableSort(pool, function (a, b) {
+            var na = normTitle(a.title), nb = normTitle(b.title);
+            return ((na === target ? 0 : 1) - (nb === target ? 0 : 1)) ||
+                ((na.indexOf(target) === 0 ? 0 : 1) - (nb.indexOf(target) === 0 ? 0 : 1)) ||
+                (na.length - nb.length);
+        });
+    }
+
+    function findEpisode(seriesUrl, season, episode) {
+        var page = get(seriesUrl);
+        if (!page) return null;
+        var domainBase = S.base.substring(0, S.base.lastIndexOf("."));
+        var epRe = new RegExp('href="(' + escapeRegex(domainBase) + '\\.[a-z]+/episode/[^"]*' + season + "x" + episode + '[^"]*)"');
+        var seasons = matchAll(/data-post="(\d+)"\s+data-season="(\d+)"/g, page)
+            .map(function (m) { return { post: m[1], season: parseInt(m[2], 10) || 1 }; });
+        if (!seasons.length) {
+            var direct = epRe.exec(page);
+            return direct ? direct[1] : null;
+        }
+        var chosen = seasons.filter(function (s) { return s.season === season; })[0];
+        if (!chosen) return null;
+        var origin = originOf(seriesUrl) || S.base;
+        var seasonHtml = get(origin + S.ajax + "?action=" + S.ajaxSeason + "&season=" + season + "&post=" + chosen.post,
+            { "Referer": seriesUrl });
+        var m = seasonHtml ? epRe.exec(seasonHtml) : null;
+        return m ? m[1] : null;
+    }
+
+    function extract(pageUrl) {
+        var html = get(pageUrl);
+        var embed = html ? new RegExp(S.embedRe).exec(html) : null;
+        if (!embed) return null;
+        var embedUrl = embed[1], hash = embed[2];
+        var playerBase = embedUrl.split("/video/")[0];
+        var pageOrigin = (originOf(pageUrl) || S.base) + "/";
+        var playerHeaders = {
+            "User-Agent": S.ua,
+            "Referer": playerBase + "/",
+            "Origin": playerBase,
+            "X-Requested-With": "XMLHttpRequest",
+        };
+        // The player occasionally answers with an empty body; one retry clears it.
+        for (var attempt = 0; attempt < 2; attempt++) {
+            var json = parseJson(http.postForm(playerBase + S.playerPath + hash + S.getVideo, playerHeaders, { hash: hash, r: pageOrigin }));
+            var url = json ? (json.videoSource || json.securedLink || "") : "";
+            if (typeof url === "string" && url.indexOf("http") === 0) return url;
+        }
+        return null;
+    }
+
+    function resolve(media) {
+        if (!media.title) return NOT_FOUND;
+        var isMovie = media.type === "MOVIE";
+        var candidates = search(media.title, isMovie, media.year);
+        if (!candidates.length) return NOT_FOUND;
+        var season = isMovie ? 0 : (media.season || 1);
+        var episode = isMovie ? 0 : (media.episode || 1);
+
+        var playlist = null;
+        for (var i = 0; i < Math.min(3, candidates.length) && !playlist; i++) {
+            var pageUrl = isMovie ? candidates[i].url : findEpisode(candidates[i].url, season, episode);
+            if (pageUrl) playlist = extract(pageUrl);
+        }
+        if (!playlist) return NOT_FOUND;
+
+        var cdn = originOf(playlist);
+        var streamHeaders = { "User-Agent": S.ua };
+        if (cdn) {
+            streamHeaders["Referer"] = cdn + "/";
+            streamHeaders["Origin"] = cdn;
+        }
+        return {
+            type: "success",
+            streamUrl: playlist,
+            streamType: "hls",
+            codec: "h264",
+            skipProbe: false,
+            headers: streamHeaders,
+            captions: [],
+            variants: [{
+                id: "sana-master",
+                name: "Sana Master (Multi-Audio)",
+                quality: "auto",
+                codec: "h264",
+                tag: "multi-audio",
+                streamUrl: playlist,
+                streamType: "hls",
+                headers: streamHeaders,
+                requiresRefreshOnSwitch: false,
+            }],
+        };
+    }
+
+    return { resolve: resolve };
+})();
+
+// ---- src/sources/zeta.js ----
+// Zeta — movies & shows. Three endpoints asked at once; each returns an AES-GCM-encrypted
+// stream URL. The first endpoint's URL is a relay whose "q" parameter carries the real per-quality
+// playlists and the headers they need; the relay is often very slow (up to a minute to start), so
+// those playlists are played directly and the relay links are kept as fallbacks.
+var Zeta = (function () {
+    var S = SECRETS.zeta;
+
+    function headers() {
+        return { "User-Agent": SECRETS.rhea.ua, "Origin": S.origin, "Referer": S.referer };
+    }
+
+    function stream(id, url) {
+        if (!url || url.indexOf("http") !== 0) return null;
+        return {
+            id: id, name: "Zeta " + capitalize(id) + " (Auto)", quality: "auto",
+            url: url, isDash: url.indexOf(".mpd") >= 0, headers: headers(),
+        };
+    }
+
+    // The relay's per-quality playlists, best first, each with the headers its host requires.
+    function direct(relay) {
+        var q = queryParam(relay.url, "q");
+        var payload = q ? parseJson(base64Decode(q)) : null;
+        if (!payload || !payload.v || !payload.v.length) return [];
+        var h = { "User-Agent": SECRETS.rhea.ua };
+        var extra = payload.h || {};
+        if (typeof extra.origin === "string") h["Origin"] = extra.origin;
+        if (typeof extra.referer === "string") h["Referer"] = extra.referer;
+        var out = payload.v.filter(function (v) {
+            return v && typeof v.u === "string" && v.u.indexOf("https://") === 0;
+        }).map(function (v) {
+            var quality = String(v.q || "auto");
+            return {
+                id: relay.id + "-" + quality, name: "Zeta " + capitalize(relay.id) + " " + quality,
+                quality: quality, url: v.u, isDash: false, headers: h,
+            };
+        });
+        return stableSort(out, function (a, b) { return (parseInt(b.quality, 10) || 0) - (parseInt(a.quality, 10) || 0); });
+    }
+
+    // Endpoints 1 and 2 answer { sources: { <name>: { url } } }; prefer the configured name.
+    function fromSources(id, keyHex, json) {
+        var sources = json && json.sources;
+        if (!sources || typeof sources !== "object") return null;
+        var target = sources[S.pick];
+        if (!target) {
+            var first = Object.keys(sources)[0];
+            target = first ? sources[first] : null;
+        }
+        if (!target || !target.url) return null;
+        return stream(id, decrypt.aesGcmHex(String(target.url), keyHex));
+    }
+
+    function resolve(media) {
+        if (!media.tmdbId) return NOT_FOUND;
+        var isShow = media.type === "SHOW";
+        var type = isShow ? "tv" : "movie";
+        var episodePart = isShow ? "&seasonId=" + (media.season || 1) + "&episodeId=" + (media.episode || 1) : "";
+        var query = "tmdbId=" + media.tmdbId + "&type=" + type + episodePart;
+        var titledQuery = "tmdbId=" + media.tmdbId + "&type=" + type +
+            (media.title ? "&t=" + formEncode(media.title) : "") +
+            (media.year && media.year > 0 ? "&ry=" + media.year : "") + episodePart;
+
+        var responses = http.all([
+            { url: S.base + "/" + S.e1 + "?" + query, headers: headers() },
+            { url: S.base + "/" + S.e2 + "?" + query, headers: headers() },
+            { url: S.base + "/" + S.e3 + "?" + titledQuery, headers: headers() },
+        ]);
+        var third = parseJson(okBody(responses[2]));
+        var streams = [
+            fromSources(S.e1, S.e1key, parseJson(okBody(responses[0]))),
+            fromSources(S.e2, S.e2key, parseJson(okBody(responses[1]))),
+            third && third.dash ? stream(S.e3, decrypt.aesGcmHex(String(third.dash), S.e3key)) : null,
+        ].filter(function (s) { return s; });
+        if (!streams.length) return NOT_FOUND;
+        if (streams[0].id === S.e1) {
+            // Direct playlists first, the remaining endpoints next, the slow relay last.
+            streams = direct(streams[0]).concat(streams.slice(1), [streams[0]]);
+        }
+
+        var primary = streams[0];
+        return {
+            type: "success",
+            streamUrl: primary.url,
+            streamType: primary.isDash ? "dash" : "hls",
+            codec: "h264",
+            skipProbe: false,
+            headers: primary.headers,
+            captions: [],
+            variants: streams.map(function (s) {
+                return {
+                    id: "zeta-" + s.id,
+                    name: s.name,
+                    quality: s.quality,
+                    codec: "h264",
+                    tag: "remux",
+                    streamUrl: s.url,
+                    streamType: s.isDash ? "dash" : "hls",
+                    headers: s.headers,
+                    requiresRefreshOnSwitch: false,
+                };
+            }),
+        };
+    }
+
+    return { resolve: resolve };
+})();
+
 // ---- src/plugin.js ----
 // Entry point the app calls. Same contract as the old APK plugin's Entry class: every method takes
 // and returns strings (JSON where structured).
+// To add a source: one line here with its codename id, display name and `anime` flag. App v1.8.2+
+// lists any source declared here, so no app update is needed.
 var SOURCES = [
     { id: "rhea", name: "Rhea", anime: false, impl: Rhea },
     { id: "zeta", name: "Zeta", anime: false, impl: Zeta },
@@ -1489,7 +1491,7 @@ function sourcesJson(ids) {
     SOURCES.forEach(function (s) { byId[s.id] = s; });
     return JSON.stringify({
         sources: ids.filter(function (id) { return byId[id]; })
-            .map(function (id) { return { id: id, displayName: byId[id].name }; }),
+            .map(function (id) { return { id: id, displayName: byId[id].name, anime: byId[id].anime }; }),
     });
 }
 
@@ -1528,7 +1530,10 @@ var plugin = {
                 result = source.impl.resolve(media);
             } else {
                 // No source given: try this media type's sources in priority order.
-                var order = media.isAnime ? [Sana, Kylie, Remi] : [Rhea, Zeta];
+                var preferred = media.isAnime ? [Sana, Kylie, Remi] : [Rhea, Zeta];
+                var order = preferred.concat(SOURCES.filter(function (s) {
+                    return s.anime === !!media.isAnime && preferred.indexOf(s.impl) < 0;
+                }).map(function (s) { return s.impl; }));
                 for (var i = 0; i < order.length && result.type !== "success"; i++) {
                     result = order[i].resolve(media);
                 }

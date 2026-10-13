@@ -5,11 +5,11 @@
   "downloadUrl": "https://raw.githubusercontent.com/pennythiefuk/P-Stream-Releases/main/plugin-release.apk",
   "hash": "sha256:ac7377aac418d3815b234faf65b81934798b711cc3fb6efbb14ee83f21169faa",
   "js": {
-    "version": 10,
-    "displayVersion": "2.2.0",
+    "version": 11,
+    "displayVersion": "2.2.1",
     "minAppVersion": 6,
     "url": "https://raw.githubusercontent.com/pennythiefuk/P-Stream-Releases/main/plugin-release.js",
-    "hash": "sha256:404abfc6725dacdc434ca8695108034e6fd0c0c9197eab46cc958c4b15d564f3",
-    "signature": "MEQCIE1bojqTdhAAx4HRHfh9lY96Vq5qD6Zjaa5eUFylLsMTAiBpsXP6OjENU/owe6JRU2J0A9WW874zsWC/Okps6tsJMg=="
+    "hash": "sha256:983c9e873165df6010db808b33864107d587f6ad1b0764634327ed3115aff41b",
+    "signature": "MEUCIClkEpJmhSer2zpd13g2owucBM0sWoTeDw2Q6B204k8WAiEA7kvuZnunephfDnmO/eRkR75CxccfueYbb810nGeMTIU="
   }
 }
