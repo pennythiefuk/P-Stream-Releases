@@ -8,7 +8,7 @@ You'll need an Android phone or tablet on **Android 7.0 or newer**. P-Stream isn
 
 ### 1. Download the app
 1. On your phone, open the **[latest release](https://github.com/pennythiefuk/P-Stream-Releases/releases/latest)**.
-2. Under **Assets**, tap the file ending in **`.apk`**, for example `P-Stream-v1.8.6.apk`.
+2. Under **Assets**, tap the file ending in **`.apk`**, for example `P-Stream-v1.8.7.apk`.
 3. If your browser warns that "this type of file can harm your device", tap **Download anyway**. This is the standard warning for any app that doesn't come from the Play Store.
 
 ### 2. Open the file
